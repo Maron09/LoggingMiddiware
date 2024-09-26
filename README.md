@@ -5,4 +5,4 @@
 ## Installation
 
 ```bash
-go get github.com/yourusername/logmiddleware
+go get github.com/maron09/logmiddleware
