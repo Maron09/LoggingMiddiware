@@ -1,29 +1,30 @@
-# logmiddleware
+# Go HTTP Logging Middleware
 
-`logmiddleware` is a simple HTTP middleware for logging HTTP requests. It logs the HTTP method, path, status code, and the duration of each request to the standard logger. This package is easy to integrate into any Go project that uses the `net/http` package.
+This package provides a simple logging middleware for Go web applications. It logs every HTTP request made to your server, including the HTTP method, request path, status code, and the time taken to process each request. It is lightweight and easily integrates with the standard `net/http` package as well as routers like `gorilla/mux`.
 
 ## Features
 
-- Logs the request method (e.g., GET, POST)
-- Logs the request path (e.g., /api/v1/products)
-- Logs the HTTP status code (e.g., 200, 404)
-- Logs the duration of each request
-- Lightweight and simple to use
+- Logs the HTTP method (GET, POST, etc.)
+- Logs the request path (e.g., `/api/v1/products`)
+- Logs the status code (e.g., 200, 404)
+- Logs the time taken to handle each request
+- Easy to integrate with existing Go web applications
+- Works with both the standard `net/http` router and other popular routers like `gorilla/mux`
 
 ## Installation
 
-To install the package, run the following command:
+To install this package, run the following command:
 
 ```bash
-go get github.com/maron09/logmiddleware
-```
+go get github.com/yourusername/logmiddleware
 
-##  Usage
+Usage
 
-You can use logmiddleware by wrapping your HTTP handlers or routers with the LoggingMiddleware function.
+You can use this middleware by wrapping your existing http.Handler with the LoggingMiddleware function.
+
 Basic Example
 
-go
+Below is an example of how to integrate the logging middleware into a simple Go application using the standard http.ServeMux router:
 
 package main
 
@@ -33,25 +34,24 @@ import (
 )
 
 func main() {
+    // Create a new ServeMux
     mux := http.NewServeMux()
 
-    // Register your routes
+    // Define a simple handler
     mux.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
         w.Write([]byte("Hello, World!"))
     })
 
-    // Wrap the mux router with the logging middleware
+    // Wrap the ServeMux with the logging middleware
     loggedMux := logmiddleware.LoggingMiddleware(mux)
 
-    // Start the server
+    // Start the HTTP server
     http.ListenAndServe(":8080", loggedMux)
 }
 
-Example with gorilla/mux
+Using with gorilla/mux
 
-You can also use logmiddleware with gorilla/mux or any other router:
-
-go
+You can also use this logging middleware with the gorilla/mux router:
 
 package main
 
@@ -62,6 +62,7 @@ import (
 )
 
 func main() {
+    // Create a new gorilla/mux router
     router := mux.NewRouter()
 
     // Define your routes
@@ -69,13 +70,19 @@ func main() {
         w.Write([]byte("Product List"))
     }).Methods("GET")
 
-    // Apply logging middleware
+    // Wrap the router with the logging middleware
     loggedRouter := logmiddleware.LoggingMiddleware(router)
 
     // Start the server
     http.ListenAndServe(":8080", loggedRouter)
 }
 
-Customizing Log Output
+Customizing the Logging Behavior
 
-By default, logmiddleware uses Go's standard log package to log to the console. You can easily modify the loggingMiddleware function to log to a file, structured logger, or any other logging destination.
+This middleware uses Go's built-in log package to print logs to the standard output (typically the console). If you'd like to modify this behavior (e.g., log to a file or use a structured logger), you can modify the loggingMiddleware function to suit your needs.
+
+For instance, integrating with a structured logger like logrus or zap can be done by replacing the log.Printf line with the appropriate logger function.
+
+Contributing
+
+Feel free to contribute to this project by opening issues or submitting pull requests. Your contributions are highly appreciated!
